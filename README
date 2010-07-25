@@ -1,0 +1,6 @@
+This plugin allows you to add condtion to workflow that will block
+issue transition unless all issues linked to this one via specified
+link type(s) have specified status(es).
+
+Built for JIRA 4.x, should be suitable for version 3.13.x and below
+(no 4.x-specific APIs used)

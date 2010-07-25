@@ -1,0 +1,4 @@
+All issue linked to this one via link types
+#foreach ($lt in $linkTypes)<b>$lt.getString("linkname")</b>#if($velocityCount != $linkTypes.size())#if($velocityCount == ($linkTypes.size() - 1))&nbsp;or&nbsp;#else,&nbsp;#end#else #end#end
+must have one of the following statuses to allow issue transition:
+#foreach ($status in $statuses)<b>$status.getString("name")</b>#if($velocityCount != $statuses.size())#if($velocityCount == ($statuses.size() - 1))&nbsp;or&nbsp;#else,&nbsp;#end#else.#end#end

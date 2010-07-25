@@ -1,0 +1,62 @@
+<tr bgcolor="ffffff">
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Link types:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <table cellpadding="2" cellspacing="2">
+        #foreach ($linkType in $linkTypes)
+            <tr>
+                <td><input type="checkbox" name="link_types" value="$linkType.getString('id')"
+                #if (${selectedLinkTypes})
+                    #if (${selectedLinkTypes.contains($linkType.getString('id'))})
+                    CHECKED
+                    #end
+                #end
+                ></td>
+                <td>#displayConstantIcon ($linkType)&nbsp;$linkType.getString("linkname")</td>
+            </tr>
+        #end
+        </table>
+        <br><font size="1">The link types taken into account by this condition.</font>
+    </td>
+</tr>
+<tr bgcolor="ffffff">
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Statuses:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <table cellpadding="2" cellspacing="2">
+        #foreach ($status in $statuses)
+            <tr>
+                <td><input type="checkbox" name="issue_statuses" value="$status.getString('id')"
+                #if (${selectedStatuses})
+                    #if (${selectedStatuses.contains($status.getString('id'))})
+                    CHECKED
+                    #end
+                #end
+                ></td>
+                <td>#displayConstantIcon ($status)&nbsp;$status.getString("name")</td>
+            </tr>
+        #end
+        </table>
+        <br><font size="1">The linked issue statuses required to allow issue transitions.</font>
+    </td>
+</tr>
+<script language="JavaScript">
+
+    function isSomethingChecked(checkboxes) {
+        if (checkboxes) {
+            for(i=0; i<checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    return true;
+                }
+            }
+        }
+        alert('You should select at least one alternative');
+        return false;
+    }
+    oldOnsubmit = document.forms["jiraform"].onsubmit
+    document.forms["jiraform"].onsubmit = function() {
+      return isSomethingChecked(document.forms["jiraform"].issue_statuses) && isSomethingChecked(document.forms["jiraform"].link_types) && oldOnsubmit();
+    };
+</script>

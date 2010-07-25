@@ -1,0 +1,17 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <application-version min="4.0" max="4.2" />
+    </plugin-info>
+
+    <workflow-condition key="issueblockinglinks-condition" name="Blocking By Links Condition" class="ua.astapov.jira.plugins.blockinglinks.WorkflowBlockingLinksConditionFactoryImpl">
+        <description>Condition to block issue transition depending on status of issues linked to it.</description>
+<!-- customize -->
+        <condition-class>ua.astapov.jira.plugins.blockinglinks.BlockingLinksCondition</condition-class>
+        <resource type="velocity" name="view" location="templates/issueblockinglinkscondition/issueblockinglinks-condition-view.vm"/>
+        <resource type="velocity" name="input-parameters" location="templates/issueblockinglinkscondition/issueblockinglinks-condition-input-params.vm"/>
+        <resource type="velocity" name="edit-parameters" location="templates/issueblockinglinkscondition/issueblockinglinks-condition-edit-params.vm"/>
+    </workflow-condition>
+</atlassian-plugin>

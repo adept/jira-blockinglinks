@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2002-2004 Alex Perez <quimicefa@gmail.com>
  * Copyright (c) 2010 Dmitry Astapov <dastapov@gmail.com>
- * Distributed under Apache License 2.0
  * All rights reserved.
  */
 package ua.astapov.jira.plugins.blockinglinks;
@@ -11,9 +10,7 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.link.IssueLink;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.Condition;
-import org.apache.log4j.Category;
-import org.ofbiz.core.entity.GenericValue;
-
+import org.apache.log4j.Logger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +18,10 @@ import java.util.Map;
 
 public class BlockingLinksCondition implements Condition
 {
-    private static final Category log = Category.getInstance(BlockingLinksCondition.class);
+    private static final Logger log = Logger.getLogger(BlockingLinksCondition.class);
 
-    public boolean passesCondition(Map transientVars, Map args, PropertySet ps)
+    @SuppressWarnings("rawtypes")
+	public boolean passesCondition(Map transientVars, Map args, PropertySet ps)
     {
         // actual issue
         Issue issue = (Issue) transientVars.get("issue");
@@ -34,11 +32,11 @@ public class BlockingLinksCondition implements Condition
         String linkTypes = (String) args.get("linkTypes");
         log.debug("linkTypes: " + linkTypes);
 
-        List validStates = Arrays.asList( statuses.split(","));
-        List inflictedLinkTypes = Arrays.asList( linkTypes.split(","));
+        List<String> validStates = Arrays.asList( statuses.split(","));
+        List<String> inflictedLinkTypes = Arrays.asList( linkTypes.split(","));
 
         // incidents linked to this one
-        List inwardLinks = ComponentManager.getInstance().getIssueLinkManager().getInwardLinks(issue.getLong("id"));
+        List<IssueLink> inwardLinks = ComponentManager.getInstance().getIssueLinkManager().getInwardLinks(issue.getLong("id"));
 
         for (int i = 0; i < inwardLinks.size(); i++)
         {
@@ -49,7 +47,7 @@ public class BlockingLinksCondition implements Condition
             log.debug("Inflicted link found. issueLinkName: " + link.getIssueLinkType().getName());
 
             // the status of the other issue
-            String issueStatus = ((GenericValue ) link.getSource()).getString("status");
+            String issueStatus = link.getSourceObject().getStatusObject().getId();
             log.debug("Status on the other end of the link in " + issueStatus);
 
             if (  ! validStates.contains( issueStatus  ) ) {
